@@ -5,6 +5,7 @@
 [![Computer Vision](https://img.shields.io/badge/CV-OpenCV%20%7C%20Scikit--Image%20%7C%20SciPy-blue)](https://github.com)
 [![Metrology](https://img.shields.io/badge/Metrology-ISO%2013322--1%20Compliant-emerald)](https://github.com)
 [![License](https://img.shields.io/badge/License-MIT-purple)](https://github.com)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Asmitxp/nano-vision-2.0)
 
 ---
 
