@@ -2,12 +2,26 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-UPLOAD_DIR = BASE_DIR / "uploads"
-SAMPLE_DIR = BASE_DIR / "sample_images"
 
-# Ensure directories exist
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
+# On Vercel serverless, filesystem is read-only except /tmp
+IS_VERCEL = bool(os.getenv("VERCEL"))
+if IS_VERCEL:
+    UPLOAD_DIR = Path("/tmp/uploads")
+    SAMPLE_DIR = BASE_DIR / "sample_images"
+else:
+    UPLOAD_DIR = BASE_DIR / "uploads"
+    SAMPLE_DIR = BASE_DIR / "sample_images"
+
+# Ensure directories exist safely
+try:
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
+
+try:
+    SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 class Settings:
     PROJECT_NAME: str = "NanoVision AI"
@@ -22,7 +36,7 @@ class Settings:
     # Database: SQLite default for seamless local running, postgresql:// fully compatible
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        f"sqlite:///{BASE_DIR / 'nanovision.db'}"
+        "sqlite:////tmp/nanovision.db" if IS_VERCEL else f"sqlite:///{BASE_DIR / 'nanovision.db'}"
     )
     
     # Paths
