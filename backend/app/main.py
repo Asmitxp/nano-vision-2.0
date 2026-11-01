@@ -21,16 +21,17 @@ from app.routers import auth, upload, projects, analysis, chatbot, reports
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Startup: Ensure tables exist
     try:
-        # Startup: Ensure tables exist
         Base.metadata.create_all(bind=engine)
-        
-        # Generate realistic sample benchmarks
         sem_path, tem_path = generate_benchmark_micrographs()
-        
-        # Seed default researcher user and demo project if empty
-        db = SessionLocal()
-        try:
+    except Exception as e:
+        print(f"[NanoVision Startup Warning] Benchmark/Table init error: {e}")
+        sem_path, tem_path = None, None
+
+    # Seed default researcher user and demo project if empty
+    db = SessionLocal()
+    try:
         user = db.query(User).filter(User.email == "researcher@nanovision.ai").first()
         if not user:
             user = User(
@@ -45,7 +46,7 @@ async def lifespan(app: FastAPI):
 
         # Seed initial analyzed demo project if none exists
         existing_projects = db.query(Project).filter(Project.user_id == user.id).first()
-        if not existing_projects and sem_path.exists():
+        if not existing_projects and sem_path and sem_path.exists():
             # Copy sample into uploads directory
             demo_img_name = "demo_sem_gold_nanoparticles.png"
             dest = settings.UPLOAD_PATH / demo_img_name
