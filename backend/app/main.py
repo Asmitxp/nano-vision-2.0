@@ -21,15 +21,16 @@ from app.routers import auth, upload, projects, analysis, chatbot, reports
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Ensure tables exist
-    Base.metadata.create_all(bind=engine)
-    
-    # Generate realistic sample benchmarks
-    sem_path, tem_path = generate_benchmark_micrographs()
-    
-    # Seed default researcher user and demo project if empty
-    db = SessionLocal()
     try:
+        # Startup: Ensure tables exist
+        Base.metadata.create_all(bind=engine)
+        
+        # Generate realistic sample benchmarks
+        sem_path, tem_path = generate_benchmark_micrographs()
+        
+        # Seed default researcher user and demo project if empty
+        db = SessionLocal()
+        try:
         user = db.query(User).filter(User.email == "researcher@nanovision.ai").first()
         if not user:
             user = User(

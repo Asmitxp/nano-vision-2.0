@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 IS_VERCEL = bool(os.getenv("VERCEL"))
 if IS_VERCEL:
     UPLOAD_DIR = Path("/tmp/uploads")
-    SAMPLE_DIR = BASE_DIR / "sample_images"
+    SAMPLE_DIR = Path("/tmp/sample_images")
 else:
     UPLOAD_DIR = BASE_DIR / "uploads"
     SAMPLE_DIR = BASE_DIR / "sample_images"
