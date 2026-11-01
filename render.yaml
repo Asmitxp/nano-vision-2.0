@@ -41,3 +41,4 @@ services:
           name: nanovision-backend
           property: host
         transform: https://{{.host}}/api
+

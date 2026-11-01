@@ -77,3 +77,4 @@ If you prefer to configure the services individually in Render's UI:
    `GET /api/health` returns status `200 OK` for zero-downtime health checking on Render.
 4. **CORS:**
    FastAPI CORS is configured to allow requests from any frontend domain.
+
